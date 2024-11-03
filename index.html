@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send POST Request Example</title>
+</head>
+<body>
+
+    <h1>Send POST Request to www.wwevy.com</h1>
+
+    <form id="myForm">
+        <!-- Text input for the user ID -->
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required>
+
+        <!-- Add a submit button to trigger the POST request -->
+        <button type="button" onclick="sendPostRequest()">Submit</button>
+
+        <!-- Add a button to open the link in a new tab -->
+        <button type="button" onclick="openLink()">Open Link</button>
+    </form>
+
+    <script>
+        var responseBody = null;
+
+        function sendPostRequest() {
+            // Get the user ID from the input field
+            var userId = document.getElementById("userId").value;
+
+            // Construct the URL-encoded data string
+            var data = "userId=1611610&languageType=4&infullType=14&costKey=com.neptune.domino.coincard0035&agentId=";
+
+            // Specify the target URL
+            var targetUrl = "https://www.wwevy.com/web/webInfull.do";
+
+            // Create and configure the XMLHttpRequest object
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", targetUrl, true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            // Define a callback function to handle the response
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    // Check if the response was successful
+                    if (xhr.status == 200) {
+                        // Store the response body
+                        responseBody = xhr.responseText;
+                    } else {
+                        // Handle the error
+                        console.error("Error during POST request:", xhr.statusText);
+                    }
+                }
+            };
+
+            // Send the POST request with the data
+            xhr.send(data);
+        }
+
+        function openLink() {
+            // Check if the response body is not null
+            if (responseBody) {
+                // Parse the JSON response
+                var responseJson = JSON.parse(responseBody);
+                // Extract the link from the response
+                var link = responseJson.data.extraData;
+                // Open the link in a new tab
+                window.open(link, "_blank");
+            } else {
+                console.error("No response body available.");
+            }
+        }
+    </script>
+
+</body>
+</html>
